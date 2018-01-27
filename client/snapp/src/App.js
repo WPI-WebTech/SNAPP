@@ -4,7 +4,12 @@ import './App.css';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducers from './reducers';
+import Header from './components/Header';
+import Main from './components/Main';
 
+/**
+ * The main component of the app
+ */
 class App extends Component {
 
   constructor(props) {
@@ -16,13 +21,8 @@ class App extends Component {
     return (
       <Provider store={this.store}>
         <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          <Header />
+          <Main />
         </div>
       </Provider>
     );
