@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import reducers from './reducers';
 import Header from './components/Header';
 import Main from './components/Main';
@@ -20,10 +21,12 @@ class App extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <div className="App">
-          <Header />
-          <Main />
-        </div>
+        <MuiThemeProvider>
+          <div className="App">
+            <Header />
+            <Main />
+          </div>
+        </MuiThemeProvider>
       </Provider>
     );
   }
