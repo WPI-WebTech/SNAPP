@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import { logger } from 'redux-logger';
+import createHistory from 'history/createBrowserHistory';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import reducers from './reducers';
 import Header from './components/Header';
@@ -15,18 +18,32 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.store = createStore(reducers);
+    const middleware = [];
+
+    // connect react-router location state with redux
+    this.history = createHistory();
+    const reduxRouterMiddleware = routerMiddleware(this.history);
+    middleware.push(reduxRouterMiddleware);
+
+    // log redux actions in development mode
+    if (process.env.NODE_ENV === 'development') {
+        middleware.push(logger);
+    }
+
+    this.store = createStore(reducers, applyMiddleware(...middleware));
   }
 
   render() {
     return (
       <Provider store={this.store}>
-        <MuiThemeProvider>
-          <div className="App">
-            <Header />
-            <Main />
-          </div>
-        </MuiThemeProvider>
+        <ConnectedRouter history={this.history}>
+          <MuiThemeProvider>
+            <div className="App">
+              <Header />
+              <Main />
+            </div>
+          </MuiThemeProvider>
+        </ConnectedRouter>
       </Provider>
     );
   }
