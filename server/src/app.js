@@ -31,20 +31,20 @@ app.post('/request', function(req, res) => {
 	// So we can parse the request body "req", create a Ride Request obejct from that data
 	// and add that to the database using the Firebase API
 	// Then we send an "OK" response in "res"
-
+	addRide(req,res);
 });
 
 app.get('/request', function(req, res) => {
 	// This function handles a GET request made to snap.wpi.edu/request
 	// So we get all of the request obejcts from Firebase and returns them in "res"
-
+	rides = getAllRides();
 });
 
 app.get('/request/:requestID', function(req, res) => {
 	// This function handles a GET request for a specific request, based on its ID
 	// The format will be snap.wpi.edu/request/12345
 	// So we get the request object with the corresponding ID and return them in "res"
-
+	ride = getSpecificRide(req, res);
 });
 
 app.update('/request/:requestID', function(req, res) => {
@@ -59,14 +59,14 @@ app.delete('/request/:requestID', function(req, res) => {
 	// So we get the request object with the corresponding ID and update the appropriate field based
 	// on the data passed in "req"
 	// Note: We might not need to support this functionality?
-	
+	deleteRide(req, res);
 }
 
 app.listen(PORT); // Listen to server calls on the appropriate port number
 
 
 
-//add a ride to the database under all rides
+//add a ride to the database under all rides and ride queue
 function addRide(req, res){
 
 	var body = '';
@@ -93,7 +93,7 @@ function addRide(req, res){
 		var hours = date.getHours();
 		var min = date.getMinutes();
 		
-
+		//add ride to all rides collection
 		var docRef = database.collection('allRides/');
 		docRef.once("value").then(function(snapshot) {
 			//set all the information into one json
@@ -106,12 +106,26 @@ function addRide(req, res){
 				status: stat
 			};
 
+			//creates new document with unique name and add the data for the ride
+			db.collection('allRides/').doc('ride' + id).set(data);
+		})
+
+		//add ride to ride queue with minimal info
+		var docRef = database.collection('rideQueue/');
+		docRef.once("value").then(function(snapshot) {
 			//create new document name number
 			rideNum = snapshot.numChildren()+1;
 
+			//set all the information into one json
+			var data = {
+				ID: id,
+				Queue Position: rideNum 
+			};
+
 			//creates new document with unique name and add the data for the ride
-			db.collection('allRides/').doc('ride' + rideNum).set(data);
+			db.collection('rideQueue/').doc('ride' + id).set(data);
 		})
+
 
 		res.end()
 
@@ -144,4 +158,116 @@ function getAllRides(){
 
 	//returns list of all rides
 	return rides;
+}
+
+//gets specific ride
+function getSpecificRide(req, res){
+
+	var body = '';
+	req.on('data', function (data) {
+		body += data;
+		if (body.length > 1e6) {
+		  req.connection.destroy();
+		}
+	});
+	req.on('end', function () {
+		//parse and get all the information for the ride
+		var post = qs.parse(body);
+		var id = post.id;
+
+		//list of ride
+		var ride = []
+
+		var docRef = db.collection('allRides/');
+
+		//Get rides from allRides Collection
+		var allRides = docRef.get().then(snapshot => {
+		        snapshot.forEach(doc => {
+		        	//document data
+				    var rideID = doc.data().id;
+
+				    //if ride id is found add to ride
+				    if(rideID == id){
+				    	rideData = {"ride number": key, "ride data": childData};
+
+					    //add ride to list
+			        	rides.push(rideData);
+				    }
+				    
+		        });
+		    }).catch(err => {
+		        console.log('Error getting documents', err);
+		    });
+
+		//returns list of specific ride
+		return ride;
+
+	});
+}
+
+
+
+//gets ride queue
+function getRideQueue(){
+	//list of all rides
+	var rides = []
+
+	var docRef = db.collection('rideQueue/');
+
+	//Get rides from allRides Collection
+	var allRides = docRef.get().then(snapshot => {
+	        snapshot.forEach(doc => {
+	        	//document name
+	        	var key = doc.id;
+	        	//document data
+			    var data = doc.data();
+
+			    rideData = {"ride number": key, "ride data": childData};
+
+			    //add ride to list
+	        	rides.push(rideData);
+	        });
+	    }).catch(err => {
+	        console.log('Error getting documents', err);
+	    });
+
+	//returns list of all rides
+	return rides;
+}
+
+
+//delete a ride to the database under ride queue
+function deleteRide(req, res){
+
+	var body = '';
+	req.on('data', function (data) {
+		body += data;
+		if (body.length > 1e6) {
+		  req.connection.destroy();
+		}
+	});
+	req.on('end', function () {
+		//parse and get all the information for the ride
+		var post = qs.parse(body);
+		var id = post.id;
+		
+		//delete ride from  ride queue
+		var rideQueue = docRef.get().then(snapshot => {
+	        snapshot.forEach(doc => {
+	        	//document data
+			    var rideID = doc.data().id;
+
+			    if(rideID == id){
+			   		db.collection('rideQueue').doc('ride' + rideID).delete();
+			    }
+
+	        });
+	    }).catch(err => {
+	        console.log('Error getting documents', err);
+	    });
+
+
+		res.end()
+
+	});
 }
