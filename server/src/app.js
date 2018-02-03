@@ -26,41 +26,45 @@ var database = admin.firebase;
  */
 
 // For these Express fuctions, "req" is the body of the Request, and "res" is the body of the response
-app.post('/request', function(req, res) => {
+app.post('/request', function(req, res) {
 	// This function handles a POST request made to snap.wpi.edu/request
 	// So we can parse the request body "req", create a Ride Request obejct from that data
 	// and add that to the database using the Firebase API
 	// Then we send an "OK" response in "res"
 	addRide(req,res);
+	res.status(200);
+	res.send("Ok");
 });
 
-app.get('/request', function(req, res) => {
+app.get('/request', function(req, res)  {
 	// This function handles a GET request made to snap.wpi.edu/request
 	// So we get all of the request obejcts from Firebase and returns them in "res"
 	rides = getAllRides();
+	res.json = JSON.parse(rides);
+
 });
 
-app.get('/request/:requestID', function(req, res) => {
+app.get('/request/:requestID', function(req, res)  {
 	// This function handles a GET request for a specific request, based on its ID
 	// The format will be snap.wpi.edu/request/12345
 	// So we get the request object with the corresponding ID and return them in "res"
 	ride = getSpecificRide(req, res);
 });
 
-app.update('/request/:requestID', function(req, res) => {
+app.update('/request/:requestID', function(req, res)  {
 	// This function handles an UPDATE request for a specific Ride Request, based on its ID
 	// So we get the request object with the corresponding ID and update the appropriate field based
 	// on the data passed in "req"
 
 });
 
-app.delete('/request/:requestID', function(req, res) => {
+app.delete('/request/:requestID', function(req, res)  {
 	// This function handles a DELETE request for a specific Ride Request, based on its ID
 	// So we get the request object with the corresponding ID and update the appropriate field based
 	// on the data passed in "req"
 	// Note: We might not need to support this functionality?
 	deleteRide(req, res);
-}
+});
 
 app.listen(PORT); // Listen to server calls on the appropriate port number
 
@@ -118,8 +122,8 @@ function addRide(req, res){
 
 			//set all the information into one json
 			var data = {
-				ID: id,
-				Queue Position: rideNum 
+				"ID": id,
+				"Queue Position": rideNum 
 			};
 
 			//creates new document with unique name and add the data for the ride
