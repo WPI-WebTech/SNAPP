@@ -45,3 +45,49 @@
   text-align: left;
   margin: 0 0 20px 0;
 }
+
+.Hours-content {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.Hours-heading {
+  text-align: left;
+  margin: 0;
+}
+
+.Hours {
+  text-align: left;
+  margin: 0 0 20px 0;
+}
+
+.Request-form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.Form-row {
+  display: flex;
+  width: 100%;
+  margin: 0 0 20px 0;
+}
+
+.Form-label {
+  margin-right: 5px;
+}
+
+.Form-text-input {
+  width: 100%;
+}
+
+.Form-num-input {
+  max-width: 25px;
+}
+
+.Request-button {
+  align-self: center;
+}

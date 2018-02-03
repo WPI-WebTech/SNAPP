@@ -52,11 +52,6 @@ class Header extends Component {
                         Home
                     </MenuItem>
                     <MenuItem
-                        containerElement={<Link className="NavLink" to='/request-status' />}
-                        onClick={this.toggleDrawer.bind(this)}>
-                        Request Status
-                    </MenuItem>
-                    <MenuItem
                         containerElement={<Link className="NavLink" to='/hours' />}
                         onClick={this.toggleDrawer.bind(this)}>
                         Hours
