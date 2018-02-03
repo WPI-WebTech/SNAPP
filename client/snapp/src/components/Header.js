@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { AppBar, Drawer, MenuItem } from 'material-ui';
 
 /**
@@ -21,9 +22,23 @@ class Header extends Component {
         });
     }
 
+    // set header title based on route pathname
+    mapPathnameToTitle() {
+        switch (this.props.pathname) {
+            case '/request-status':
+                return 'Request Status';
+            case '/rules':
+                return 'Rules and Regulations';
+            case '/hours':
+                return 'Hours';
+            default:
+                return 'SNAPP';
+        }
+    }
+
     render() {
         return (
-            <AppBar title="SNAPP" onLeftIconButtonClick={this.toggleDrawer.bind(this)}>
+            <AppBar title={this.mapPathnameToTitle()} onLeftIconButtonClick={this.toggleDrawer.bind(this)}>
                 <Drawer
                     docked={false}
                     open={this.state.drawerOpen}
@@ -58,4 +73,10 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        pathname: state.router.location.pathname,
+    };
+};
+
+export default connect(mapStateToProps, {})(Header);

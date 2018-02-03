@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 class StatusScreen extends Component {
     render() {
         return (
-            <div>
+            <div className="Page-content">
                 Status Screen (view request status)
             </div>
         );

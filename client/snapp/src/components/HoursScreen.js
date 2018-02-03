@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 class HoursScreen extends Component {
     render() {
         return (
-            <div>
+            <div className="Page-content">
                 Hours Screen (view SNAPP hours)
             </div>
         );

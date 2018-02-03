@@ -11,7 +11,7 @@ import RulesScreen from './RulesScreen';
 class Main extends Component {
     render() {
         return (
-            <main>
+            <main className="Page">
                 <Switch>
                     <Route exact path='/' component={HomeScreen}/>
                     <Route path='/request-status' component={StatusScreen}/>

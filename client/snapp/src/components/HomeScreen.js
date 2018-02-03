@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 class HomeScreen extends Component {
     render() {
         return (
-            <div>
+            <div className="Page-content">
                 Home Screen (view map and request a ride)
             </div>
         );
