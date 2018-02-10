@@ -89,7 +89,10 @@ app.delete('/request/:requestID', function(req, res)  {
 	// So we get the request object with the corresponding ID and update the appropriate field based
 	// on the data passed in "req"
 	// Note: We might not need to support this functionality?
-	deleteRide(req, res);
+	deleteRide(req.params.requestID).then((status => {
+		res.status(status);
+		res.send("OK");
+	}));
 });
 
 app.listen(PORT); // Listen to server calls on the appropriate port number
@@ -234,38 +237,12 @@ function updateRide(requestID, req){
 	});
 }
 //delete a ride to the database under ride queue
-function deleteRide(req, res){
+function deleteRide(requestID){
 
-	var body = '';
-	req.on('data', function (data) {
-		body += data;
-		if (body.length > 1e6) {
-			req.connection.destroy();
-		}
+	var rideRef = database.collection('allRides').doc(requestID);
+	return rideRef.delete().then(response => {
+		return 200;
 	});
-	req.on('end', function () {
-		//parse and get all the information for the ride
-		var post = JSON.parse(body);
-		var id = post.id;
-		
-		//delete ride from  ride queue
-		var rideQueue = docRef.get().then(snapshot => {
-			snapshot.forEach(doc => {
-	        	//document data
-	        	var rideID = doc.data().id;
-
-	        	if(rideID == id){
-	        		database.ref('rideQueue').doc('ride' + rideID).delete();
-	        	}
-
-	        });
-		}).catch(err => {
-			console.log('Error getting documents', err);
-		});
-
-
-		res.end()
-
-	});
+	
 }
 
