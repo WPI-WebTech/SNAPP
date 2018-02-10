@@ -1,11 +1,17 @@
-import actionTypes from '../constants'
+import actionType from '../constants';
 
-export const requestRide = () => {
+export const requestRide = ({ fromAddress, toAddress, numPassengers, accommodations }) => {
   return {
-    type: actionTypes.REQUEST_RIDE,
-    payload: Promise.resolve({
-      pickupAddress: "100 Institute Rd.",
-      requestedAt: 1400293420
-    })
-  }
-}
+    type: actionType.REQUEST_RIDE,
+    payload: {
+      fromAddress,
+      toAddress,
+      numPassengers,
+      accommodations
+    }
+  };
+};
+
+export const cancelRide = () => {
+  return { type: actionType.CANCEL_RIDE };
+};

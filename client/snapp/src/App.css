@@ -26,3 +26,78 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.Page {
+  background-color: white;
+}
+
+.Page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: white;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.Info-bullet {
+  text-align: left;
+  margin: 0 0 20px 0;
+}
+
+.Hours-content {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.Hours-heading {
+  text-align: left;
+  margin: 0;
+}
+
+.Hours {
+  text-align: left;
+  margin: 0 0 20px 0;
+}
+
+.Request-form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.Request-title {
+  align-self: center;
+  text-align: center;
+}
+
+.Form-row {
+  display: flex;
+  width: 100%;
+  margin: 0 0 20px 0;
+}
+
+.Form-label {
+  margin-right: 5px;
+}
+
+.Form-text-input {
+  width: 100%;
+}
+
+.Form-num-input {
+  max-width: 25px;
+}
+
+.Ride-data {
+  text-align: left;
+  color: gray;
+}
+
+.Request-button {
+  align-self: center;
+}
