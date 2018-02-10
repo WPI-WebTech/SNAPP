@@ -71,12 +71,18 @@ app.get('/request/:requestID', function(req, res)  {
 	});
 });
 
-// app.update('/request/:requestID', function(req, res)  {
-// 	// This function handles an UPDATE request for a specific Ride Request, based on its ID
-// 	// So we get the request object with the corresponding ID and update the appropriate field based
-// 	// on the data passed in "req"
+app.post('/request/:requestID', function(req, res)  {
+	// This function handles a POSTE request for a specific Ride Request, based on its ID
+	// So we get the request object with the corresponding ID and update the appropriate field based
+	// on the data passed in "req"
+	console.log("Received update request for ride with ID " + req.params.requestID);
+	updateRide(req.params.requestID, req).then((status) => {
+		res.status(status);
+		res.send("OK");
+	});
+	
 
-// });
+});
 
 app.delete('/request/:requestID', function(req, res)  {
 	// This function handles a DELETE request for a specific Ride Request, based on its ID
@@ -220,7 +226,13 @@ function getRideQueue(){
 	return rides;
 }
 
-
+// Update a specific ride defined by requestID
+function updateRide(requestID, req){
+	var rideRef = database.collection('allRides').doc(requestID);
+	return rideRef.update(req.body).then(response => {
+		return 200;
+	});
+}
 //delete a ride to the database under ride queue
 function deleteRide(req, res){
 
@@ -256,3 +268,4 @@ function deleteRide(req, res){
 
 	});
 }
+
