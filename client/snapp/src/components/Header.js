@@ -16,14 +16,14 @@ class Header extends Component {
         };
     }
 
-    toggleDrawer() {
+    toggleDrawer = () => {
         this.setState({
             drawerOpen: !this.state.drawerOpen,
         });
     }
 
     // set header title based on route pathname
-    mapPathnameToTitle() {
+    mapPathnameToTitle = () => {
         switch (this.props.pathname) {
             case '/request-status':
                 return 'Request Status';
@@ -38,27 +38,24 @@ class Header extends Component {
 
     render() {
         return (
-            <AppBar title={this.mapPathnameToTitle()} onLeftIconButtonClick={this.toggleDrawer.bind(this)}>
+            <AppBar title={this.mapPathnameToTitle()} onLeftIconButtonClick={this.toggleDrawer}>
                 <Drawer
                     docked={false}
                     open={this.state.drawerOpen}
                     onRequestChange={(open) => this.setState({drawerOpen: open})}>
-                    <MenuItem onClick={this.toggleDrawer.bind(this)}>
-                        Close
-                    </MenuItem>
                     <MenuItem
                         containerElement={<Link className="NavLink" to='/' />}
-                        onClick={this.toggleDrawer.bind(this)}>
+                        onClick={this.toggleDrawer}>
                         Home
                     </MenuItem>
                     <MenuItem
                         containerElement={<Link className="NavLink" to='/hours' />}
-                        onClick={this.toggleDrawer.bind(this)}>
+                        onClick={this.toggleDrawer}>
                         Hours
                     </MenuItem>
                     <MenuItem
                         containerElement={<Link className="NavLink" to='/rules' />}
-                        onClick={this.toggleDrawer.bind(this)}>
+                        onClick={this.toggleDrawer}>
                         Rules and Regulations
                     </MenuItem>
                 </Drawer>
