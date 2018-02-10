@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -10,7 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import reducers from './reducers';
 import Header from './components/Header';
 import Main from './components/Main';
-
+import { init as initFirebase } from './services/FirebaseService'
 /**
  * The main component of the app
  */
@@ -27,10 +26,12 @@ class App extends Component {
 
     // log redux actions in development mode
     if (process.env.NODE_ENV === 'development') {
-        middleware.push(logger);
+      middleware.push(logger);
     }
 
     this.store = createStore(reducers, applyMiddleware(...middleware));
+
+    initFirebase()
   }
 
   render() {

@@ -39,6 +39,7 @@ class HomeScreen extends Component {
                         <p className="Request-title">Request a Ride</p>
                         <div className="Form-row">
                             <TextField
+                                id="pickup"
                                 fullWidth={true}
                                 className="Form-text-input"
                                 type="text"
@@ -48,6 +49,7 @@ class HomeScreen extends Component {
                         </div>
                         <div className="Form-row">
                             <TextField
+                                id="dropoff"
                                 fullWidth={true}
                                 className="Form-text-input"
                                 type="text"
@@ -57,6 +59,7 @@ class HomeScreen extends Component {
                         </div>
                         <div className="Form-row">
                             <TextField
+                                id="num-of-pass"
                                 floatingLabelText="Number of passengers"
                                 fullWidth={true}
                                 className="Form-num-input"
@@ -68,6 +71,7 @@ class HomeScreen extends Component {
                         </div>
                         <div className="Form-row">
                             <TextField
+                                id="accomodations"
                                 fullWidth={true}
                                 className="Form-text-input"
                                 type="text"
@@ -75,7 +79,7 @@ class HomeScreen extends Component {
                                 value={this.state.accommodations}
                                 onChange={(event) => this.setState({ accommodations: event.target.value })} />
                         </div>
-                        <RaisedButton 
+                        <RaisedButton
                             className="Request-button"
                             secondary={true}
                             label="Request Ride"
@@ -102,9 +106,10 @@ class HomeScreen extends Component {
                             <label className="Form-label">Accommodations:</label>
                             <label className="Ride-data">{this.state.accommodations}</label>
                         </div>
-                        <RaisedButton className="Request-button" onClick={this.props.cancelRide}>
-                            Cancel Ride
-                        </RaisedButton>
+                        <RaisedButton
+                            label="Cancel Ride"
+                            className="Request-button"
+                            onClick={this.props.cancelRide} />
                     </div>
                 );
             default:
