@@ -63,7 +63,12 @@ app.get('/request/:requestID', function(req, res)  {
 	// This function handles a GET request for a specific request, based on its ID
 	// The format will be snap.wpi.edu/request/12345
 	// So we get the request object with the corresponding ID and return them in "res"
-	ride = getSpecificRide(req, res);
+	console.log("Received GET request for ride with ID " + req.params.requestID);
+	ride = getSpecificRide(req.params.requestID).then((ride) => {
+		console.log("getSpecificRide() returned");
+		res.status(200);
+		res.send(JSON.stringify(ride));
+	});
 });
 
 // app.update('/request/:requestID', function(req, res)  {
@@ -172,48 +177,17 @@ function getAllRides(){
 }
 
 //gets specific ride
-function getSpecificRide(req, res){
+function getSpecificRide(requestID){
 
-	var body = '';
-	req.on('data', function (data) {
-		body += data;
-		if (body.length > 1e6) {
-			req.connection.destroy();
+	var ride;
+	return database.collection('allRides').doc(requestID).get().then(doc => {
+		if(!doc.exists) {
+			console.log("No RideRequest with id " + requestID);
+		} else {
+			return doc.data();
 		}
 	});
-	req.on('end', function () {
-		//parse and get all the information for the ride
-		var post = JSON.parse(body);
-		var id = post.id;
-
-		//list of ride
-		var ride = []
-
-		var docRef = database.ref('allRides/');
-
-		//Get rides from allRides Collection
-		var allRides = docRef.get().then(snapshot => {
-			snapshot.forEach(doc => {
-		        	//document data
-		        	var rideID = doc.data().id;
-
-				    //if ride id is found add to ride
-				    if(rideID == id){
-				    	rideData = {"ride number": key, "ride data": childData};
-
-					    //add ride to list
-					    rides.push(rideData);
-					}
-
-				});
-		}).catch(err => {
-			console.log('Error getting documents', err);
-		});
-
-		//returns list of specific ride
-		return ride;
-
-	});
+	
 }
 
 
