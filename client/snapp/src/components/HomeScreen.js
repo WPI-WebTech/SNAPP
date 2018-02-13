@@ -4,6 +4,7 @@ import { requestRide, cancelRide } from "../actions/RideActions";
 import { rideStatus } from "../constants";
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import MapContainer from './MapContainer.js';
 
 /**
  * Screen with map and form where users can request rides
@@ -28,7 +29,7 @@ class HomeScreen extends Component {
         if (fromAddress && toAddress && numRiders > 0 && numRiders < 6) {
             this.props.requestRide({ fromAddress, toAddress, numPassengers: numRiders, accommodations });
         }
-    }
+    };
 
     // render page content depending on ride status state
     renderPageContent() {
@@ -120,6 +121,7 @@ class HomeScreen extends Component {
     render() {
         return (
             <div className="Page-content">
+                <MapContainer />
                 {this.renderPageContent()}
             </div>
         );

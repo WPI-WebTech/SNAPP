@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "firebase": "^4.9.1",
+    "google-maps-react": "^1.1.2",
     "history": "^4.7.2",
     "material-ui": "^0.20.0",
     "react": "^16.2.0",
