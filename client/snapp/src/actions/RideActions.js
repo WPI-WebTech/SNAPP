@@ -1,5 +1,5 @@
 import actionType from '../constants';
-import { addRideRequest } from '../services/FirebaseService'
+import { addRideRequest, cancelRideOnServer } from '../services/FirebaseService'
 import rideModel from '../models/RideModel'
 
 export const requestRide = ({ fromAddress, toAddress, numPassengers, accommodations }) => {
@@ -15,6 +15,9 @@ export const requestRide = ({ fromAddress, toAddress, numPassengers, accommodati
   };
 };
 
-export const cancelRide = () => {
-  return { type: actionType.CANCEL_RIDE };
+export const cancelRide = rideId => {
+  return { 
+    type: actionType.CANCEL_RIDE,
+    payload: cancelRideOnServer(rideId)
+   };
 };

@@ -9,7 +9,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import reducers from './reducers';
 import Header from './components/Header';
 import Main from './components/Main';
+import promiseMiddleware from 'redux-promise-middleware';
 import { init as initFirebase } from './services/FirebaseService'
+
 /**
  * The main component of the app
  */
@@ -23,6 +25,7 @@ class App extends Component {
     this.history = createHistory();
     const reduxRouterMiddleware = routerMiddleware(this.history);
     middleware.push(reduxRouterMiddleware);
+    middleware.push(promiseMiddleware())
 
     // log redux actions in development mode
     if (process.env.NODE_ENV === 'development') {

@@ -22,4 +22,19 @@ export const addRideRequest = ride => {
     return database
         .collection('allRides')
         .add(ride)
+        .then(docRef => {
+            console.log(docRef)
+            return {
+                ...docRef.get(), 
+                ...{id: docRef.id},
+                ...{status: "REQUESTED"}
+            }
+        })
+}
+
+export const cancelRideOnServer = rideId => {
+    return database
+        .collection('allRides')
+        .doc(rideId)
+        .update({ status: "cancelled" })
 }
