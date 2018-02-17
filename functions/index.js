@@ -2,6 +2,10 @@ const functions = require('firebase-functions');
 
 const admin = require('firebase-admin');
 
+/**
+ * Firebase functions to handle new rides and status changes for the SNAPP Firestore database
+ *
+ */
 var config = {
 	apiKey: "AIzaSyDb7pzdnEJJlClx4-enDHkTJR81yDg3HVs",
 	authDomain: "snapp-c0271.firebaseapp.com",
@@ -15,13 +19,6 @@ firebase.initializeApp(config);
 
 var databse = admin.firebase;
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 // Validate a new ride
 exports.validateNewRide = functions.firestore.document('ApprovalQueue').onCreate(event => {
 	var newRide = event.data.data();
@@ -29,20 +26,39 @@ exports.validateNewRide = functions.firestore.document('ApprovalQueue').onCreate
 	// See if there is currently a ride in an active queue with that user's email
 	// If so, reject the ride automatically.
 	var email = newRide.email;
-	
+	if(containsEmail('ApprovalQueue/', email) || containsEMail('WaitingQueue/', email)){
+		return event.data.ref.set({
+			status: 'rejected'
+		}); // Note: this assumes that the other function will handle moving the rejected ride to the Archive
+	}
+
 
 
 });
 
+// Handle a change in a document in the ApprovalQueue
 exports.approvalUpdate = functions.firestore.document('ApprovalQueue').onUpdate(event => {
 	statusUpdate(event);
 });
 
+// Handle a change in a document in the WaitingQueue
 exports.waitingUpdate = functions.firestore.document('WaitingQueue').onUpdate(event => {
 	statusUpdate(event);
 })
 
-
+function containsEmail(tableName, email){
+	var docRef = db.collecton(tableName);
+	var allRides = docRef.get().then(snapshot => {
+		var docEmail = snapshot.data().email;
+		if(docEmail == email){
+			return true;
+		}
+	});
+	return false;
+}
+/**
+ * Handle a change in a document in the ApprovalQueue or the WaitingQueue
+ */
 function statusUpdate(event){
 	var updatedRide = event.data.data();
 	var oldRide = event.data.previous.data();
