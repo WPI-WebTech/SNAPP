@@ -2,12 +2,14 @@ export default (
     fromAddress,
     toAddress,
     numPassengers,
-    accommodations
+    accommodations,
+    status
 ) => {
     return {
         fromAddress,
         toAddress,
         numPassengers,
-        accommodations
+        accommodations,
+        status
     }
 }

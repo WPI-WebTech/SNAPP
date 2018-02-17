@@ -10,7 +10,8 @@ export const requestRide = ({ fromAddress, toAddress, numPassengers, accommodati
         fromAddress,
         toAddress,
         numPassengers,
-        accommodations
+        accommodations,
+        "REQUESTED"
       ))
   };
 };

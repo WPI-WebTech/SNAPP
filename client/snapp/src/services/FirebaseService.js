@@ -36,5 +36,5 @@ export const cancelRideOnServer = rideId => {
     return database
         .collection('allRides')
         .doc(rideId)
-        .update({ status: "cancelled" })
+        .update({ status: "CANCELLED" })
 }
