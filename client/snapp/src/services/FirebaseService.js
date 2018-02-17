@@ -1,5 +1,6 @@
 import * as firebase from 'firebase'
 import '@firebase/firestore'
+import {rideStatus} from '../constants'
 
 let database;
 

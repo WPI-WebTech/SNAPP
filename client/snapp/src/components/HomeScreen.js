@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestRide, cancelRide } from "../actions/RideActions";
-import actionType  from "../constants";
+import actionType, { rideStatus } from "../constants";
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MapContainer from './MapContainer.js';
@@ -34,8 +34,8 @@ class HomeScreen extends Component {
     // render page content depending on ride status state
     renderPageContent() {
         switch (this.props.rideStatus) {
-            case actionType.CANCELLED:
-            case actionType.DEFAULT:
+            case rideStatus.CANCELLED:
+            case rideStatus.DEFAULT:
                 return (
                     <div className="Request-form">
                         <p className="Request-title">Request a Ride</p>
@@ -88,7 +88,7 @@ class HomeScreen extends Component {
                             onClick={() => this.requestRide()} />
                     </div>
                 );
-            case actionType.REQUESTED:
+            case rideStatus.REQUESTED:
                 return (
                     <div className="Request-form">
                         <p className="Request-title">Your ride has been requested</p>
