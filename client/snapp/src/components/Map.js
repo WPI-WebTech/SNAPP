@@ -26,7 +26,7 @@ class Map extends Component {
             const mapRef = this.refs.map;
             const node = ReactDOM.findDOMNode(mapRef);
 
-            let zoom = 14;
+            let zoom = 13;
             let lat = 42.273238;
             let lng = -71.808337;
             const center = new maps.LatLng(lat, lng);
@@ -35,6 +35,19 @@ class Map extends Component {
                 zoom: zoom
             });
             this.map = new maps.Map(node, mapConfig);
+
+            // add 1 mile radius to map
+            const mileRadius = new maps.Circle({
+                strokeColor: '#00FF00',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#00FF00',
+                fillOpacity: 0.1,
+                map: this.map,
+                center: center,
+                radius: 1609.34, // 1609.34 meters = 1 mile
+                clickable: false,
+            });
         }
     }
 

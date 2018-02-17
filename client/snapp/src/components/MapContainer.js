@@ -11,7 +11,9 @@ class MapContainer extends Component {
             return <div>Loading Map...</div>
         }
         return (
-            <Map google={this.props.google} />
+            <Map google={this.props.google}>
+                
+            </Map>
         );
     }
 }
