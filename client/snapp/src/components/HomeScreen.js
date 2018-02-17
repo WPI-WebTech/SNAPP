@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestRide, cancelRide } from "../actions/RideActions";
-import actionType, { rideStatus } from "../constants";
+import { rideStatus } from "../constants";
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MapContainer from './MapContainer.js';

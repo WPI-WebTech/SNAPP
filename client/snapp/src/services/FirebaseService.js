@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
 import '@firebase/firestore'
-import {rideStatus} from '../constants'
+import { rideStatus } from '../constants'
 
 let database;
 
@@ -24,11 +24,10 @@ export const addRideRequest = ride => {
         .collection('allRides')
         .add(ride)
         .then(docRef => {
-            console.log(docRef)
             return {
-                ...docRef.get(), 
-                ...{id: docRef.id},
-                ...{status: "REQUESTED"}
+                ...docRef.get(),
+                ...{ id: docRef.id },
+                ...{ status: rideStatus.REQUESTED }
             }
         })
 }
@@ -37,5 +36,5 @@ export const cancelRideOnServer = rideId => {
     return database
         .collection('allRides')
         .doc(rideId)
-        .update({ status: "CANCELLED" })
+        .update({ status: rideStatus.CANCELLED })
 }
