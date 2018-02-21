@@ -31,6 +31,10 @@ class Header extends Component {
                 return 'Rules and Regulations';
             case '/hours':
                 return 'Hours';
+            case '/shuttles':
+                return 'Shuttles';
+            case '/contact':
+                return 'Contact SNAP';
             default:
                 return 'SNAPP';
         }
@@ -57,6 +61,16 @@ class Header extends Component {
                         containerElement={<Link className="NavLink" to='/rules' />}
                         onClick={this.toggleDrawer}>
                         Rules and Regulations
+                    </MenuItem>
+                    <MenuItem
+                        containerElement={<Link className="NavLink" to='/shuttles' />}
+                        onClick={this.toggleDrawer}>
+                        Shuttles
+                    </MenuItem>
+                    <MenuItem
+                        containerElement={<Link className="NavLink" to='/contact' />}
+                        onClick={this.toggleDrawer}>
+                        Contact
                     </MenuItem>
                 </Drawer>
             </AppBar>
