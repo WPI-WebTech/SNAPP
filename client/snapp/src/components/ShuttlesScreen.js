@@ -11,17 +11,18 @@ class ShuttlesScreen extends Component {
         this.state = {
             desktopLayout: true,
         };
+        this.checkScreenSize = this.checkScreenSize.bind(this);
     }
 
     componentDidMount() {
         // listen for changes to screen size
         this.checkScreenSize();
-        window.addEventListener("resize", this.checkScreenSize.bind(this));
+        window.addEventListener("resize", this.checkScreenSize);
     }
 
     componentWillUnmount() {
         // stop listening for changes to screen size
-        window.removeEventListener("resize", this.checkScreenSize.bind(this));
+        window.removeEventListener("resize", this.checkScreenSize);
     }
 
     // Set page layout to desktop or mobile depending on screen width
