@@ -14,6 +14,7 @@ var serviceAccount = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/snapp-c0271%40appspot.gserviceaccount.com"
 }
 
+var database = null;
 
 /**
  * Firebase functions to handle new rides and status changes for the SNAPP Firestore database
@@ -27,7 +28,7 @@ exports.validateNewRide = functions.firestore.document('ApprovalQueue/{rideID}')
 	// See if there is currently a ride in an active queue with that user's email
 	// If so, reject the ride automatically.
 	var email = newRide.email;
-	if(containsEmail('ApprovalQueue/', email) || containsEMail('WaitingQueue/', email)){
+	if(containsEmail('ApprovalQueue/', email) || containsEmail('WaitingQueue/', email)){
 		return event.data.ref.set({
 			status: 'rejected'
 		}); // Note: this assumes that the other function will handle moving the rejected ride to the Archive
@@ -39,12 +40,12 @@ exports.validateNewRide = functions.firestore.document('ApprovalQueue/{rideID}')
 
 // Handle a change in a document in the ApprovalQueue
 exports.approvalUpdate = functions.firestore.document('ApprovalQueue/{rideID}').onUpdate(event => {
-	statusUpdate(event);
+	return statusUpdate(event, event.params.rideID);
 });
 
 // Handle a change in a document in the WaitingQueue
 exports.waitingUpdate = functions.firestore.document('WaitingQueue/{rideID}').onUpdate(event => {
-	statusUpdate(event);
+	return statusUpdate(event, event.params.rideID);
 })
 
 //Checks if snapp is currently opperating when a someone submits a request
@@ -63,8 +64,11 @@ function initializeFirebase(){
 
 }
 function containsEmail(tableName, email){
-	database = initializeFirebase();
-	var docRef = database.collecton(tableName);
+	if(database == null){
+		database = initializeFirebase();
+	}
+	
+	var docRef = database.collection(tableName);
 	var allRides = docRef.get().then(snapshot => {
 		var docEmail = snapshot.data().email;
 		if(docEmail == email){
@@ -76,10 +80,11 @@ function containsEmail(tableName, email){
 /**
  * Handle a change in a document in the ApprovalQueue or the WaitingQueue
  */
-function statusUpdate(event){
+function statusUpdate(event, rideID){
 	database = initializeFirebase();
 	var updatedRide = event.data.data();
 	var oldRide = event.data.previous.data();
+
 
 	var status = updatedRide.status;
 	var oldStatus = oldRide.status;
@@ -89,15 +94,18 @@ function statusUpdate(event){
 		if(status == "approved"){
 			// Move the ride to the WaitingQueue
 			var data = updatedRide;
-			console.log("Updated ride's ID is " + updatedRide.id);
-			database.collection('WaitingQueue/').doc(updatedRide.id).set(data);
+			console.log("Updated ride's ID is " + rideID);
+			event.data.ref.delete();
+			return database.collection('WaitingQueue').doc(rideID).set(data);
 		} else if (status == "rejected" || status == "completed" || status == "cancelled" || status == "noShow"){
 			// move the ride to the Archive
 			var data = updatedRide;
-			database.collection('Archive/').doc(updatedRide.id).set(data);
+			console.log("Updated ride's ID is " + rideID);
+			event.data.ref.delete();
+			return database.collection('Archive').doc(rideID).set(data);
 		}
 		// Remove the old entry
-		event.data.ref.delete();
+		
 	}
 }
 
