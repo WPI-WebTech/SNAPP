@@ -25,6 +25,12 @@ var database = null;
 exports.validateNewRide = functions.firestore.document('ApprovalQueue/{rideID}').onCreate(event => {
 	var newRide = event.data.data();
 
+	//check if ride is within the hours of operation
+	var hours = hoursOfOperation();
+	if(hours != true){
+		return hours;
+	}
+
 	// See if there is currently a ride in an active queue with that user's email
 	// If so, reject the ride automatically.
 	var email = newRide.email;
@@ -33,9 +39,6 @@ exports.validateNewRide = functions.firestore.document('ApprovalQueue/{rideID}')
 			status: 'rejected'
 		}); // Note: this assumes that the other function will handle moving the rejected ride to the Archive
 	}
-
-
-
 });
 
 // Handle a change in a document in the ApprovalQueue
@@ -46,12 +49,6 @@ exports.approvalUpdate = functions.firestore.document('ApprovalQueue/{rideID}').
 // Handle a change in a document in the WaitingQueue
 exports.waitingUpdate = functions.firestore.document('WaitingQueue/{rideID}').onUpdate(event => {
 	return statusUpdate(event, event.params.rideID);
-})
-
-//Checks if snapp is currently opperating when a someone submits a request
-exports.checkStatus = functions.firestore.document('ApprovalQueue').onCreate(event => {
-	hoursOfOperation(event);
-	status = isSnappOperating(event);
 })
 
 
@@ -186,36 +183,9 @@ function hoursOfOperation(event){
 
     //set operation status to closedTime to indicate that snapp is not running due to time
     if(valid == false){
-	    db.collection('Service').doc('SnappStatus').update({Operation: "closedTime"});
+	    return(db.collection('Service').doc('SnappStatus').update({Operation: "closedTime"});)
     }
-
-    return valid;
-}
-
-function isSnappOperating(event){
-	running = true;
-	reason = "";
-
-	db.collection('Service').doc('SnappStatus').get().then((snapshot) => {
-        var data = snapshot.data();	//get the snapp status data in order to get the hours of operations
-
-        //check if closed due to time
-        if(data.Operating == "closedTime"){
-        	running = false;
-        	reason = "Not in hours of operation.";
-        }
-        //check  if cloded due to weather
-        else if(data.Operating == "closedWeather"){
-        	running = false;
-        	reason = "Closed due to dangerous weather.";
-        }
-        //check if snapp is operating
-        else if(data.Operating == "operating"){
-        	running = true;
-        	reason = "Snapp is in operation.";
-        }
-	});
-
-	//return if its running or not and the reason why
-    return [running, reason];
+    else{
+    	return valid;
+    }
 }
