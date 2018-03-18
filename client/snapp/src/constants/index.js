@@ -8,7 +8,11 @@ export default {
 
 export const rideStatus = {
     DEFAULT: "DEFAULT",
-    REQUESTED: "REQUESTED",
-    CANCELLED:"CANCELLED"
+    REQUESTED: "submitted",
+    CANCELLED:"cancelled",
+    REJECTED:"rejected",
+    APPROVED:"approved",
+    NOSHOW:"noShow",
+    COMPLETED:"completed"
 };
 

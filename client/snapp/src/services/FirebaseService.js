@@ -21,7 +21,7 @@ export const init = () => {
 
 export const addRideRequest = ride => {
     return database
-        .collection('allRides')
+        .collection('ApprovalQueue')
         .add(ride)
         .then(docRef => {
             return {
@@ -34,7 +34,7 @@ export const addRideRequest = ride => {
 
 export const cancelRideOnServer = rideId => {
     return database
-        .collection('allRides')
+        .collection('ApprovalQueue')
         .doc(rideId)
         .update({ status: rideStatus.CANCELLED })
 }
