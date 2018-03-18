@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { requestRide, cancelRide } from "../actions/RideActions";
 import { rideStatus } from "../constants";
 import TextField from 'material-ui/TextField';
+import LinearProgress from 'material-ui/LinearProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import MapContainer from './MapContainer.js';
 
@@ -92,6 +93,10 @@ class HomeScreen extends Component {
                 return (
                     <div className="Request-form">
                         <p className="Request-title">Your ride has been requested</p>
+                        <div className="Status-Container">
+                          <h3>Status: Awaiting Approval</h3>
+                          <LinearProgress mode="indeterminate" />
+                        </div>
                         <div className="Form-row">
                             <label className="Form-label">From:</label>
                             <label className="Ride-data">{this.state.fromAddress}</label>
