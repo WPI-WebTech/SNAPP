@@ -1,0 +1,28 @@
+.column-header {
+	float: center;
+	padding: 10px;
+	color: #fff;
+	font-family: 'Arial';
+	text-align: center;
+	flex-direction: 'row wrap';
+}
+
+.column-header.new-request {
+   	background-color: firebrick;
+}
+
+.column-header.in-progress {
+	background-color: navy;
+}
+
+.table-header {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	padding: 1em;
+	font-family: 'Arial', Arial, sans-serif;
+	font-size: 10px;
+	background-color: black;
+	z-index: 1;
+}
